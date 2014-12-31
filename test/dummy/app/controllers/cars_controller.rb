@@ -1,7 +1,7 @@
 class CarsController < ApplicationController
   acts_as_wizbang wizard_name: :simple
 
-  before_action :set_car, only: [:show, :edit, :update, :destroy]
+  before_action :set_car, only: [:show, :edit, :update, :destroy, :step_1, :step_2, :step_1_update]
 
   # GET /cars
   def index
@@ -10,7 +10,16 @@ class CarsController < ApplicationController
 
   def step_1
     @wiz = wizbang_wizard
+  end
 
+  def step_1_update
+    @car.update(car_params)
+
+    redirect_to_next_action
+
+  end
+
+  def step_2
   end
 
   # GET /cars/1

@@ -1,5 +1,26 @@
 <h1>Step 1</h1>
 
+<%= form_for(@car, url: step_1_car_path) do |f| %>
+  <% if @car.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@car.errors.count, "error") %> prohibited this car from being saved:</h2>
+
+      <ul>
+      <% @car.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :make %><br>
+    <%= f.text_field :make %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
 <%= @foo %>
 <% @wiz.steps.each do |s| %>
   <%= s %>

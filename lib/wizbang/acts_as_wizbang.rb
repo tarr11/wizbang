@@ -4,17 +4,7 @@ module Wizbang
     attr_accessor :wizbang_wizard
 
     included do
-      around_action :find_next_step
 
-      def find_next_step
-        yield
-
-        wizbang_step = wizbang_steps.select{|s| s[:step] == action_name.to_sym}.first
-        if wizbang_step && request.method != :get
-            # redirect to the next step
-          redirect_to wizbang_wizard.next_step_path wizbang_step, attributes[wizbang_wizard.resource_name]
-        end
-      end
 
       def wizbang_wizard
         self.class.wizbang_wizard
@@ -24,6 +14,18 @@ module Wizbang
         self.class.wizbang_wizard.steps
       end
 
+      def redirect_to_next_action
+        res = self.instance_variable_get("@#{wizbang_wizard.resource_name}")
+
+        next_action = wizbang_wizard.next_action(action_name, res)
+
+        if next_action
+          redirect_to action: next_action.action
+        else
+          redirect_to res
+        end
+
+      end
 
     end
     # controller extension

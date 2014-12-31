@@ -14,6 +14,17 @@ module ActionDispatch::Routing
 
   end
 
+  class WizardStep
+    attr_accessor :action
+    attr_accessor :update_action
+
+    def initialize(action, update_action)
+      self.action = action
+      self.update_action = update_action
+    end
+
+  end
+
   class Wizard
     attr_reader :steps, :name, :resource_name
     def initialize(wizard_name, resource_name)
@@ -22,7 +33,7 @@ module ActionDispatch::Routing
       @steps = []
     end
 
-    def next_action(current_step, instance)
+    def next_action(current_action, instance)
       # go through the steps
       # if a current_step is given, start there
       # if not, start at the beginning
@@ -30,10 +41,13 @@ module ActionDispatch::Routing
       next_action = nil
       # if no block is given, just pick the next step
 
-      index = steps.index(current_step)||0 
+      step = @steps.select{|s|s.action == current_action || s.update_action == current_action}.first
 
-      return @steps.select_with_index{|s,i| i > index}.first
-
+      index = 0
+      if step
+        index = @steps.index(step) + 1
+      end
+      return @steps.drop(index).first
       # if a block is given, evaluate that until it returns true
 
     end
@@ -50,10 +64,13 @@ module ActionDispatch::Routing
       wiz = Wizard.new(wizard_name, resource_name)
 
       proxy.steps.each do |s|
+        update_action  = "#{s.to_s}_update"
         # create the routes for each step
-        self.match s.to_s, via: :get
-        self.match s.to_s, via: :patch, to: "#{s.to_s}_update"
-        wiz.steps << s
+        self.member do 
+          get s.to_s
+          patch s.to_s, action: update_action
+        end
+        wiz.steps << WizardStep.new(s.to_s, update_action)
       end
       Wizbang.wizards[wizard_name] = wiz
 
