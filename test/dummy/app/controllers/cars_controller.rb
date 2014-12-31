@@ -1,9 +1,15 @@
 class CarsController < ApplicationController
+  include Wizbang::ActsAsWizbang
+
   before_action :set_car, only: [:show, :edit, :update, :destroy]
 
   # GET /cars
   def index
     @cars = Car.all
+  end
+
+  def step_1
+
   end
 
   # GET /cars/1

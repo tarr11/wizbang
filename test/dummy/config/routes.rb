@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   resources :cars do
-    wizard :simple
+    wizard :simple do
+      step :step_1
+      step :step_2
+    end
   end
 
   # The priority is based upon order of creation: first created -> highest priority.
