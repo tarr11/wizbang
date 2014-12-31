@@ -1,6 +1,8 @@
 require 'test_helper'
+require 'wizbang'
 
 class CarsControllerTest < ActionController::TestCase
+
   setup do
     @car = cars(:one)
   end
@@ -10,6 +12,7 @@ class CarsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:cars)
   end
+
 
   test "should get new" do
     get :new
@@ -23,6 +26,7 @@ class CarsControllerTest < ActionController::TestCase
 
     assert_redirected_to car_path(assigns(:car))
   end
+
 
   test "should show car" do
     get :show, id: @car

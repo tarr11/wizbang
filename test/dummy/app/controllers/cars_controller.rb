@@ -1,5 +1,5 @@
 class CarsController < ApplicationController
-  include Wizbang::ActsAsWizbang
+  acts_as_wizbang wizard_name: :simple
 
   before_action :set_car, only: [:show, :edit, :update, :destroy]
 
@@ -9,6 +9,7 @@ class CarsController < ApplicationController
   end
 
   def step_1
+    @wiz = wizbang_wizard
 
   end
 

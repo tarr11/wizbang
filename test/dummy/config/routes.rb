@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :cars do
-    wizard :simple do
+    wizard :simple, :car do
       step :step_1
       step :step_2
     end
