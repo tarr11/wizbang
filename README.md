@@ -5,13 +5,13 @@ Add this to your gemfile:
 
 `gem 'wizbang', github: 'https://github.com/tarr11/wizbang'`
 
-##Problem:
+## Problem:
 Your state machine code for a wizard is spread out across your routes file, controller and models
 
-##Solution:
+## Solution:
 DRY up your rails wizard code with wizbang by moving your state machine into a DSL that is integrated with `ActionDispatch::Routing`
 
-##Benefits:
+## Benefits:
  
 * Conventional controller actions, so auth gems like cancan will work
 * Routes and generated urls are simple and easy to read
@@ -19,20 +19,21 @@ DRY up your rails wizard code with wizbang by moving your state machine into a D
 * Supports rails idioms  
 * State machine is accessible in a modular way so you can send emails with the correct URL, run reports on who is at what step, etc
 
+## Reasoning
+Wizards are not inherently RESTful.  They often cross multiple resources and are bolted on to RESTful controllers.  If we embrace what they are, we can make them flexible enough to handle complex cases (like user onboarding) but still work effectively for simple cases (like a multi-step form for a single resource) 
+
 
 ## Wizard DSL embedded in restful routes file
 ```
 Rails.application.routes.draw do
-  resources :cars do
-    wizard :simple, :car do
-      step :step_1, create: true do |car|
-        car.nil?
-      end
-      step :step_2 do |car|
-        car.make.nil? || car.model.nil?
-      end
-      step :finished
+  wizard controller: :simple, resources; [:car] do
+    step :step_1, create: true do |car|
+      car.nil?
     end
+    step :step_2 do |car|
+      car.make.nil? || car.model.nil?
+    end
+    step :finished
   end
 end
 ```
@@ -41,15 +42,10 @@ end
 The controller avoids most state machine code but still puts routes in the right place.  
 Actions represent views and can be called indepenently
 ```
-class CarsController < ApplicationController
-  acts_as_wizbang wizard_name: :simple
+class SimpleController < ApplicationController
+  acts_as_wizbang wizard: :simple
 
   before_action :set_car, only: [:show, :edit, :update, :destroy, :step_2, :step_2_update, :step_3]
-
-  # GET /cars
-  def index
-    @cars = Car.all
-  end
 
   def step_1
     @wiz = wizbang_wizard
@@ -82,7 +78,7 @@ Views are nothing special, you just post (on create) or patch (on update) to the
 ```
 <h1>Step 1</h1>
 
-<%= form_for(@car, url: step_1_cars_path) do |f| %>
+<%= form_for(@car, url: simple_step_1_path) do |f| %>
   <% if @car.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@car.errors.count, "error") %> prohibited this car from being saved:</h2>
