@@ -1,0 +1,4 @@
+<h1> Choose Store</h1>
+<% Store.all.each do |s|%>
+  <div><%= link_to s.name, simple_step_1_path(store_id: s.id)%></div>
+<% end %>

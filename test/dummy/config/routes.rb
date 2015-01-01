@@ -1,14 +1,19 @@
 Rails.application.routes.draw do
-  resources :cars do
-    wizard :simple, :car do
-      step :step_1, create: true do |car|
-        car.nil?
-      end
-      step :step_2 do |car|
-        car.make.nil? || car.model.nil?
-      end
-      step :finished
+  resources :stores
+
+  resources :cars
+  
+  wizard controller: :simple, resources: [:car, :store] do
+    step :choose_store do |car, store|
+      store.nil?
     end
+    step :step_1 do |car, store|
+      car.nil?
+    end
+    step :step_2 do |car, store|
+      car.make.nil? || car.model.nil?
+    end
+    step :finished
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

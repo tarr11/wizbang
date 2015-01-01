@@ -39,14 +39,14 @@ module ActionDispatch::Routing
   end
 
   class Wizard
-    attr_reader :steps, :name, :resource_name
-    def initialize(wizard_name, resource_name)
+    attr_reader :steps, :name, :resources
+    def initialize(wizard_name, resources)
       @name = wizard_name
-      @resource_name = resource_name
+      @resources = resources
       @steps = []
     end
 
-    def next_action(current_action, instance)
+    def next_action(current_action, resource_instances)
       # go through the steps
       # if a current_step is given, start there
       # if not, start at the beginning
@@ -62,7 +62,7 @@ module ActionDispatch::Routing
       end
       @steps.each_with_index do |s, i|
         if s.block
-          result = s.block.call(instance)
+          result = s.block.call(resource_instances)
           if result
             index = i 
             break
@@ -83,36 +83,28 @@ module ActionDispatch::Routing
   end
 
   class Mapper
-    def wizard(wizard_name, resource_name, &block)
+    def wizard(options = {}, &block)
+
       proxy = WizardStepProxy.new
       if block_given?
         proxy.instance_eval(&block)
       end
 
-      wiz = Wizard.new(wizard_name, resource_name)
+      wiz = Wizard.new(options[:controller], options[:resources])
+      controller wiz.name do 
+        get "/#{wiz.name}/", action: :index
+      end
 
       proxy.steps.each do |s|
         # create the routes for each step
-        if s[:create]
-          update_action  = "#{s[:action].to_s}_create"
-          self.collection do
-            scope wizard_name do 
-              get s[:action].to_s
-              post s[:action].to_s, action: update_action
-            end
-          end
-        else
-          update_action  = "#{s[:action].to_s}_update"
-          self.member do 
-            scope wizard_name do 
-              get s[:action].to_s
-              patch s[:action].to_s, action: update_action
-            end
-          end
+        update_action  = "#{s[:action].to_s}_update"
+        controller wiz.name do 
+          get "/#{wiz.name}/#{s[:action].to_s}", action: s[:action]
+          post "/#{wiz.name}/#{s[:action].to_s}", action: update_action
         end
         wiz.steps << WizardStep.new(s[:action].to_s, update_action, s[:block])
       end
-      Wizbang.wizards[wizard_name] = wiz
+      Wizbang.wizards[wiz.name] = wiz
 
     end 
   end
