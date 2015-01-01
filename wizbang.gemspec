@@ -10,8 +10,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Douglas Tarr"]
   s.email       = ["douglas.tarr@gmail.com"]
   s.homepage    = "https://githumb.com/tarr11/wizbang"
-  s.summary     = "Rails gem for managing wizards, using an integrated DSL for a state machine"
-  s.description = "TODO: Description of Wizbang."
+  s.summary     = "DSL for Rails Wizard"
+  s.description = "Clean up your wizard code by using an integrated DSL with your routes and controllers"
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.rdoc"]
