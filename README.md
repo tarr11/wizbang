@@ -2,6 +2,7 @@
 
 ## Install
 Add this to your gemfile:
+
 `gem 'wizbang', github: 'https://github.com/tarr11/wizbang`
 
 ##Problem:
