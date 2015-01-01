@@ -8,7 +8,7 @@ module ActionDispatch::Routing
       @steps
     end
 
-    def step(action, options = {})
+    def step(action, options = {}, &block)
       new_step = {
         action: action
       }
@@ -16,6 +16,9 @@ module ActionDispatch::Routing
       if options[:create]
         new_step[:create] = true
       end
+
+      new_step[:block] = block
+
 
       @steps << new_step
     end
@@ -25,10 +28,12 @@ module ActionDispatch::Routing
   class WizardStep
     attr_accessor :action
     attr_accessor :update_action
+    attr_accessor :block
 
-    def initialize(action, update_action)
+    def initialize(action, update_action, block)
       self.action = action
       self.update_action = update_action
+      self.block = block
     end
 
   end
@@ -54,6 +59,21 @@ module ActionDispatch::Routing
       index = 0
       if step
         index = @steps.index(step) + 1
+      end
+      @steps.each_with_index do |s, i|
+        if s.block
+          result = s.block.call(instance)
+          if result
+            index = i 
+            break
+          end
+        else
+          if i > index
+            index = i
+            break
+          end
+        end
+
       end
       return @steps.drop(index).first
       # if a block is given, evaluate that until it returns true
@@ -86,7 +106,7 @@ module ActionDispatch::Routing
             patch s[:action].to_s, action: update_action
           end
         end
-        wiz.steps << WizardStep.new(s[:action].to_s, update_action)
+        wiz.steps << WizardStep.new(s[:action].to_s, update_action, s[:block])
       end
       Wizbang.wizards[wizard_name] = wiz
 

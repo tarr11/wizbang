@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   resources :cars do
     wizard :simple, :car do
-      step :step_1, create: true
-      step :step_2
+      step :step_1, create: true do |car|
+        car.nil?
+      end
+      step :step_2 do |car|
+        car.make.nil? || car.model.nil?
+      end
       step :finished
     end
   end
