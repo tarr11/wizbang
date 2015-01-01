@@ -1,8 +1,12 @@
 # Wizbang
 
-Goal is to DRY up your wizard related code by moving wizard flow logic and state machines to routing
+##Problem:
+Your state machine code for a wizard is spread out across your routes file, controller and models
 
-Benefits:
+##Solution:
+DRY up your rails wizard code with wizbang by moving your state machine into a DSL that is integrated with `ActionDispatch::Routing`
+
+##Benefits:
  
 * Conventional controller actions, so auth gems like cancan will work
 * Routes and generated urls are simple and easy to read
@@ -96,7 +100,8 @@ Views are nothing special, you just post (on create) or patch (on update) to the
 <% end %>
 ```
 
-## Access wizard status from anywhere in your rails app (like emails or call to action on other views)
+## Access wizard status from anywhere 
+(like emails or call to action on other views)
 ```
 c = Car.find(3)
 next_action = Wizbang.wizards[:simple].next_action(c)
