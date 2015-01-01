@@ -96,14 +96,18 @@ module ActionDispatch::Routing
         if s[:create]
           update_action  = "#{s[:action].to_s}_create"
           self.collection do
-            get s[:action].to_s
-            post s[:action].to_s, action: update_action
+            scope wizard_name do 
+              get s[:action].to_s
+              post s[:action].to_s, action: update_action
+            end
           end
         else
           update_action  = "#{s[:action].to_s}_update"
           self.member do 
-            get s[:action].to_s
-            patch s[:action].to_s, action: update_action
+            scope wizard_name do 
+              get s[:action].to_s
+              patch s[:action].to_s, action: update_action
+            end
           end
         end
         wiz.steps << WizardStep.new(s[:action].to_s, update_action, s[:block])
