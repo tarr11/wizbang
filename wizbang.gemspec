@@ -7,10 +7,10 @@ require "wizbang/version"
 Gem::Specification.new do |s|
   s.name        = "wizbang"
   s.version     = Wizbang::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Wizbang."
+  s.authors     = ["Douglas Tarr"]
+  s.email       = ["douglas.tarr@gmail.com"]
+  s.homepage    = "https://githumb.com/tarr11/wizbang"
+  s.summary     = "Rails gem for managing wizards, using an integrated DSL for a state machine"
   s.description = "TODO: Description of Wizbang."
   s.license     = "MIT"
 
