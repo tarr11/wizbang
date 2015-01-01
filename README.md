@@ -25,7 +25,7 @@ Wizards are not inherently RESTful.  They often cross multiple resources and are
 For eexample. during user onboarding, you may end up creating several different resources in the context of a single wizard.  RESTful based routes simply can't handle this and most wizard code ends up looking very different than RESTful code.
 
 
-## Wizard DSL embedded in restful routes file
+## Wizard DSL embedded in routes file
 ```
 Rails.application.routes.draw do
   wizard controller: :simple, resources; [:car] do
