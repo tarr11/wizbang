@@ -3,7 +3,7 @@
 ## Install
 Add this to your gemfile:
 
-`gem 'wizbang', github: 'https://github.com/tarr11/wizbang`
+`gem 'wizbang', github: 'https://github.com/tarr11/wizbang'`
 
 ##Problem:
 Your state machine code for a wizard is spread out across your routes file, controller and models
