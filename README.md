@@ -2,6 +2,14 @@
 
 Goal is to DRY up your wizard related code by moving wizard flow logic and state machines to routing
 
+Benefits:
+ 
+* Conventional controller actions, so auth gems like cancan will work
+* Routes and generated urls are simple and easy to read
+* Supports complex state machines with a powerful DSL embedded in your routes and avoids creating separate state management that gets stale
+* Supports rails idioms  
+* State machine is accessible in a modular way so you can send emails with the correct URL, run reports on who is at what step, etc
+
 
 ## Wizard DSL embedded in restful routes file
 ```
@@ -88,3 +96,9 @@ Views are nothing special, you just post (on create) or patch (on update) to the
 <% end %>
 ```
 
+## Access wizard status from anywhere in your rails app (like emails or call to action on other views)
+```
+c = Car.find(3)
+next_action = Wizbang.wizards[:simple].next_action(c)
+FinishWizardMailer.mail(c, next_action) if next_action
+```
