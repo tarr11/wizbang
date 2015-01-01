@@ -9,7 +9,7 @@ Add this to your gemfile:
 Your state machine code for a wizard is spread out across your routes file, controller and models
 
 ## Solution:
-DRY up your rails wizard code with wizbang by moving your state machine into a DSL that is integrated with `ActionDispatch::Routing`
+Wizards are separate controllers that span multiple resources.  DRY up your rails wizard code with wizbang by moving your state machine into a DSL that is integrated with `ActionDispatch::Routing`
 
 ## Benefits:
  
