@@ -20,7 +20,7 @@ module Wizbang
         next_action = wizbang_wizard.next_action(action_name, res)
 
         if next_action
-          redirect_to action: next_action.action
+          redirect_to action: next_action.action, id: res.id
         else
           redirect_to res
         end

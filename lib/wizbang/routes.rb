@@ -8,8 +8,16 @@ module ActionDispatch::Routing
       @steps
     end
 
-    def step(step_name)
-      @steps << step_name
+    def step(action, options = {})
+      new_step = {
+        action: action
+      }
+
+      if options[:create]
+        new_step[:create] = true
+      end
+
+      @steps << new_step
     end
 
   end
@@ -64,13 +72,21 @@ module ActionDispatch::Routing
       wiz = Wizard.new(wizard_name, resource_name)
 
       proxy.steps.each do |s|
-        update_action  = "#{s.to_s}_update"
         # create the routes for each step
-        self.member do 
-          get s.to_s
-          patch s.to_s, action: update_action
+        if s[:create]
+          update_action  = "#{s[:action].to_s}_create"
+          self.collection do
+            get s[:action].to_s
+            post s[:action].to_s, action: update_action
+          end
+        else
+          update_action  = "#{s[:action].to_s}_update"
+          self.member do 
+            get s[:action].to_s
+            patch s[:action].to_s, action: update_action
+          end
         end
-        wiz.steps << WizardStep.new(s.to_s, update_action)
+        wiz.steps << WizardStep.new(s[:action].to_s, update_action)
       end
       Wizbang.wizards[wizard_name] = wiz
 
