@@ -36,7 +36,7 @@ class SimpleController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_store
-      @store = Car.find(params[:store_id]) if params[:store_id]
+      @store = Store.find(params[:store_id]) if params[:store_id]
     end
     # Use callbacks to share common setup or constraints between actions.
     def set_car

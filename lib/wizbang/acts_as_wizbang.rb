@@ -23,7 +23,7 @@ module Wizbang
           end
         end
 
-        next_action = wizbang_wizard.next_action(action_name, resource_instances)
+        next_action = wizbang_wizard.next_action(action_name, *resource_instances)
         next_url = "/#{wizbang_wizard.name}/#{next_action.action}"
         if params.length > 0
           next_url += "?"

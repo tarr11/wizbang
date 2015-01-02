@@ -24,6 +24,16 @@ ActiveRecord::Schema.define(version: 20150101175257) do
     t.datetime "updated_at"
   end
 
+  create_table "people", force: true do |t|
+    t.string   "name"
+    t.integer  "age"
+    t.string   "gender"
+    t.string   "favorite_color"
+    t.string   "location"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "stores", force: true do |t|
     t.string   "name"
     t.string   "city"

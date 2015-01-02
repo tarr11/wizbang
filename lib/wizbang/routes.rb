@@ -46,7 +46,7 @@ module ActionDispatch::Routing
       @steps = []
     end
 
-    def next_action(current_action, resource_instances)
+    def next_action(current_action, *resource_instances)
       # go through the steps
       # if a current_step is given, start there
       # if not, start at the beginning
@@ -62,7 +62,7 @@ module ActionDispatch::Routing
       end
       @steps.each_with_index do |s, i|
         if s.block
-          result = s.block.call(resource_instances)
+          result = s.block.call(*resource_instances)
           if result
             index = i 
             break

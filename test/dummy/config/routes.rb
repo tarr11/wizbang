@@ -4,11 +4,8 @@ Rails.application.routes.draw do
   resources :cars
   
   wizard controller: :simple, resources: [:car, :store] do
-    step :choose_store do |car, store|
-      store.nil?
-    end
     step :step_1 do |car, store|
-      car.nil?
+      store.is_open
     end
     step :step_2 do |car, store|
       car.make.nil? || car.model.nil?
