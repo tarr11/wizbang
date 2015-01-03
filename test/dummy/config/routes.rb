@@ -5,10 +5,10 @@ Rails.application.routes.draw do
   
   wizard controller: :simple, resources: [:car, :store] do
     step :step_1 do |car, store|
-      store.is_open
+      store.nil? || store.is_open
     end
     step :step_2 do |car, store|
-      car.make.nil? || car.model.nil?
+      car && (car.make.nil? || car.model.nil?)
     end
     step :finished
   end

@@ -4,6 +4,11 @@ module Wizbang
     attr_accessor :wizbang_wizard
 
     included do
+
+      def action_missing(action_name, *args)
+        redirect_to_next_action
+      end
+
       def wizbang_wizard
         self.class.wizbang_wizard
       end
@@ -50,11 +55,14 @@ module Wizbang
     module ClassMethods
 
       def acts_as_wizbang(options = {})
+        #self.class.action_names.add "index"
+        #puts "here"
         # add a before
         cattr_accessor :wizbang_wizard
 
         wizard_name = options[:wizard]
         self.wizbang_wizard = Wizbang.wizards[options[:wizard]]
+
         raise "can't find wizard #{@wizard_name}" unless self.wizbang_wizard
 
       end
