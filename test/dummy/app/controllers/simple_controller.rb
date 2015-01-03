@@ -1,5 +1,6 @@
 class SimpleController < ApplicationController
 
+  include Wizbang::ActsAsWizbang
   acts_as_wizbang wizard: :simple
   before_action :set_car
   before_action :set_store
