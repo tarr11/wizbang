@@ -74,4 +74,4 @@ module Wizbang
 
 end
 
-ActionController::Base.send :include, Wizbang::ActsAsWizbang
+#ActionController::Base.send :include, Wizbang::ActsAsWizbang
